@@ -594,8 +594,11 @@ progress {
 	height: 12dp;
 }
 
-.div-li{
-	width:300dp; height:30dp; float:left;
+.div-li-green{
+	width:300dp; height:40dp; float:left; color:green;
+}
+.div-li-red{
+	width:300dp; height:40dp; float:left; color:red;
 }
 .div-li-green-block{
 	width:15dp;height:15dp;float:left;background-color:green;
@@ -616,57 +619,6 @@ progress {
 <panel id="welcome1">
 	<h1>传感器状态监控：</h1>
 	<div id="monitor_panel" style="width:100%;height:60%;">
-		<div class="div-li">
-			<div class="div-li-green-block"></div>
-			<div class="div-li-p">
-				<p style="color:red">传感器1（192.155.31.59）</p>
-			</div>
-		</div>
-		<div style="width:300dp; height:30dp; float:left;">
-			<div style="width:15dp;height:15dp;float:left;background-color:green;"></div>
-			<div style="float:left;margin-left:10dp;">
-				<p style="color:green">传感器1（192.155.31.59）</p>
-			</div>
-		</div>
-		<div style="width:300dp; height:30dp; float:left;">
-			<div style="width:15dp;height:15dp;float:left;background-color:green;"></div>
-			<div style="float:left;margin-left:10dp;">
-				<p style="color:green">传感器1（192.155.31.59）</p>
-			</div>
-		</div>
-		<div style="width:300dp; height:30dp; float:left;">
-			<div style="width:15dp;height:15dp;float:left;background-color:green;"></div>
-			<div style="float:left;margin-left:10dp;">
-				<p style="color:green">传感器1（192.155.31.59）</p>
-			</div>
-		</div>
-		<div style="width:300dp; height:30dp; float:left;">
-			<div style="width:15dp;height:15dp;float:left;background-color:green;"></div>
-			<div style="float:left;margin-left:10dp;">
-				<p style="color:green">传感器1（192.155.31.59）</p>
-			</div>
-		</div>
-		<div style="width:300dp; height:30dp; float:left;">
-			<div style="width:15dp;height:15dp;float:left;background-color:green;"></div>
-			<div style="float:left;margin-left:10dp;">
-				<p style="color:green">传感器1（192.155.31.59）</p>
-			</div>
-		</div>
-		<div style="width:300dp;height:auto;float:left;">
-			<p style="color:red;">传感器1（192.155.31.59）</p>
-		</div>
-		<div style="width:300dp;height:auto;float:left;">
-			<p style="color:red;">传感器1（192.155.31.59）：断开</p>
-		</div>
-		<div style="width:300dp;height:auto;float:left;">
-			<p style="color:red;">传感器1（192.155.31.59）：断开</p>
-		</div>
-		<div style="width:300dp;height:auto;float:left;">
-			<p style="color:red;">传感器1（192.155.31.59）：断开</p>
-		</div>
-		<div style="width:300dp;height:auto;float:left;">
-			<p style="color:red;">传感器1（192.155.31.59）：断开</p>
-		</div>
 	</div>
 	<h1>服务器状态监控（192.88.32.1）：<span style="color:red;">断开</span></h1>
 </panel>

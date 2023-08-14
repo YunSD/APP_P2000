@@ -34,6 +34,7 @@
 #include "shell/include/Shell.h"
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "log.hpp"
 #include "sensor.hpp"
 #include <codecvt>
@@ -82,6 +83,11 @@ int parse_sensor() {
 	return 0;
 }
 
+const static std::string p_green = "div-li-green";
+const static std::string p_red = "div-li-red";
+const static std::string block_red = "div-li-red-block";
+const static std::string block_green = "div-li-green-block";
+
 class DemoWindow : public Rml::EventListener
 {
 public:
@@ -99,31 +105,35 @@ public:
 			}
 			if (auto target = document->GetElementById("monitor_panel")) {
 
-				Rml::ElementPtr div_ptr = document->CreateElement("div");
-				div_ptr->SetClassNames("div-li");
-
-				Rml::ElementPtr div_block_ptr = document->CreateElement("div");
-				div_block_ptr->SetClassNames("div-li-green-block");
-
-				Rml::ElementPtr div_block_p_ptr = document->CreateElement("div");
-				div_block_p_ptr->SetClassNames("div-li-p");
-
-				Rml::ElementPtr p_ptr = document->CreateElement("p");
-				p_ptr->SetAttribute("color", "red");
-				std::wstring content = L"你妈的";
-				p_ptr->SetInnerRML("传感器");
-
-				div_block_p_ptr->AppendChild(std::move(p_ptr));
-				div_ptr->AppendChild(std::move(div_block_ptr));
-				div_ptr->AppendChild(std::move(div_block_p_ptr));
-
-				target->AppendChild(std::move(div_ptr));
-
-
-				// 初始化				target->SetInnerRML("");
-
+				// 初始化界面
+				std::stringstream ss;
 				for (std::vector<sensor*>::iterator it = sensor_list.begin(); it != sensor_list.end(); ++it) {
-				
+					
+					ss.str("");
+					ss << "sensor-div" << (*it)->index;
+					Rml::ElementPtr div_ptr = document->CreateElement("div");
+					div_ptr->SetClassNames(p_green);
+					div_ptr->SetId(ss.str());
+
+					ss.str("");
+					ss << "sensor-block" << (*it)->index;
+					Rml::ElementPtr div_block_ptr = document->CreateElement("div");
+					div_block_ptr->SetClassNames(block_red);
+					div_block_ptr->SetId(ss.str());
+
+					Rml::ElementPtr div_block_p_ptr = document->CreateElement("div");
+					div_block_p_ptr->SetClassNames("div-li-p");
+
+					ss.str("");
+					ss << u8"传感器-" << (*it)->index << u8"：" << (*it)->host;
+					Rml::ElementPtr p_ptr = document->CreateElement("p");
+					p_ptr->SetInnerRML(ss.str());
+
+					div_block_p_ptr->AppendChild(std::move(p_ptr));
+					div_ptr->AppendChild(std::move(div_block_ptr));
+					div_ptr->AppendChild(std::move(div_block_p_ptr));
+
+					target->AppendChild(std::move(div_ptr));
 				}
 			}
 			
@@ -186,7 +196,35 @@ public:
 	void Update() {
 		if (iframe)
 		{
+			// 应该是用于 css 以及 效果更新
 			iframe->UpdateDocument();
+			// 刷新传感器状态
+			static std::stringstream ss;
+			for (std::vector<sensor*>::iterator it = sensor_list.begin(); it != sensor_list.end(); ++it) {
+
+				ss.str("");
+				ss << "sensor-div" << (*it)->index;
+				if (auto target = document->GetElementById(ss.str())) {
+					if ((*it)->getConnectFlag()) {
+						target->SetClassNames(p_green);
+					}
+					else {
+						target->SetClassNames(p_red);
+					}
+				}
+
+				ss.str("");
+				ss << "sensor-block" << (*it)->index;
+				if (auto target = document->GetElementById(ss.str())) {
+					if ((*it)->getConnectFlag()) {
+						target->SetClassNames(block_green);
+					}
+					else {
+						target->SetClassNames(block_red);
+					}
+				}
+			}
+
 		}
 		if (submitting && gauge && progress_horizontal)
 		{
@@ -505,6 +543,10 @@ int main(int /*argc*/, char** /*argv*/)
 	if (!Shell::Initialize())
 		return -1;
 
+	if (!parse_sensor()) {
+		return -1;
+	}
+
 	// Constructs the system and render interfaces, creates a window, and attaches the renderer.
 	if (!Backend::Initialize("P2000 Demo", width, height, false))
 	{
@@ -540,10 +582,6 @@ int main(int /*argc*/, char** /*argv*/)
 	demo_window->GetDocument()->AddEventListener(Rml::EventId::Keydown, demo_window.get());
 	demo_window->GetDocument()->AddEventListener(Rml::EventId::Keyup, demo_window.get());
 	demo_window->GetDocument()->AddEventListener(Rml::EventId::Animationend, demo_window.get());
-
-	if (!parse_sensor()) {
-		return -1;
-	}
 
 	bool running = true;
 	while (running)
