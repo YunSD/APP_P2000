@@ -132,13 +132,18 @@
     <ClCompile Include="backends\RmlUi_Platform_Win32.cpp" />
     <ClCompile Include="backends\RmlUi_Renderer_GL2.cpp" />
     <ClCompile Include="csv_parse.h" />
+    <ClCompile Include="demo.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="model_am_tcp_client.cpp" />
+    <ClCompile Include="model_automation.hpp" />
+    <ClCompile Include="model_automation.cpp" />
+    <ClCompile Include="SafeQueue.cpp" />
     <ClCompile Include="sensor.cpp" />
     <ClCompile Include="shell\src\PlatformExtensions.cpp" />
     <ClCompile Include="shell\src\RendererExtensions.cpp" />
     <ClCompile Include="shell\src\Shell.cpp" />
     <ClCompile Include="shell\src\ShellFileInterface.cpp" />
-    <ClCompile Include="string_utils.cpp" />
+    <ClCompile Include="StrUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="backends\RmlUi_Backend.h" />
@@ -147,12 +152,15 @@
     <ClInclude Include="backends\RmlUi_Renderer_GL2.h" />
     <ClInclude Include="INIReader.h" />
     <ClInclude Include="log.hpp" />
+    <ClInclude Include="model_am_tcp_client.hpp" />
+    <ClInclude Include="out_cache.hpp" />
+    <ClInclude Include="SafeQueue.hpp" />
     <ClInclude Include="sensor.hpp" />
     <ClInclude Include="shell\include\PlatformExtensions.h" />
     <ClInclude Include="shell\include\RendererExtensions.h" />
     <ClInclude Include="shell\include\Shell.h" />
     <ClInclude Include="shell\include\ShellFileInterface.h" />
-    <ClInclude Include="string_utils.h" />
+    <ClInclude Include="StrUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

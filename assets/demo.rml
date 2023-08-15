@@ -549,7 +549,7 @@ progress {
 	width: 100%;
 	height: 100%;
 }
-#sandbox_target 
+#sandbox_target,#sensor_up,#sensor_down
 {
 	box-sizing: border-box;
 	background-color: #fff;
@@ -894,9 +894,9 @@ progress {
 		<col/>
 		<col/>
 		<tr id="row_source">
-			<td><textarea id="sandbox_rml_source" wrap="nowrap" onchange="set_sandbox_body"></textarea></td>
+			<td><div id="sensor_up"/></td>
 			<td id="vertical_slider"><handle class="slider"size_target="col_rml_source"/></td>
-			<td><textarea id="sandbox_rcss_source" wrap="nowrap" onchange="set_sandbox_style"></textarea></td>
+			<td><div id="sensor_down"/></td>
 		</tr>
 		<tr>
 			<td colspan=3 id="horizontal_slider"><handle class="slider" size_target="row_source"/></td>

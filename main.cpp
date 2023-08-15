@@ -39,7 +39,7 @@
 #include "sensor.hpp"
 #include <codecvt>
 #include "csv_parse.h"
-#include "string_utils.h"
+#include "model_automation.hpp"
 
 static const Rml::String sandbox_default_rcss = R"(
 body { top: 0; left: 0; right: 0; bottom: 0; overflow: hidden auto; }
@@ -57,10 +57,10 @@ scrollbarhorizontal sliderbar:hover { background: #888; }
 scrollbarhorizontal sliderbar:active { background: #666; }
 )";
 
-const static std::string filename = "sensor.csv";
-static std::vector<sensor*> sensor_list;
 
-int parse_sensor() {
+static std::vector<sensor*> sensor_list;
+const static int parse_sensor() {
+	const static std::string filename = "sensor.csv";
 	try {
 		io::CSVReader<2> in(filename);
 		in.set_header("index", "host");
@@ -88,10 +88,11 @@ const static std::string p_red = "div-li-red";
 const static std::string block_red = "div-li-red-block";
 const static std::string block_green = "div-li-green-block";
 
+
 class DemoWindow : public Rml::EventListener
 {
 public:
-	DemoWindow(const Rml::String& title, Rml::Context* context)
+	DemoWindow(const Rml::String& title, Rml::Context* context):mode_a(sensor_list)
 	{
 		using namespace Rml;
 		document = context->LoadDocument("demo.rml");
@@ -191,6 +192,7 @@ public:
 
 			document->Show();
 		}
+		mode_a.start();
 	}
 
 	void Update() {
@@ -278,6 +280,7 @@ public:
 	void Shutdown() {
 		if (document)
 		{
+			mode_a.stop();
 			document->Close();
 			document = nullptr;
 		}
@@ -349,6 +352,8 @@ private:
 	bool submitting = false;
 	double submitting_start_time = 0;
 	Rml::String submit_message;
+
+	model_automation mode_a;
 };
 
 
