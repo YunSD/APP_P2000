@@ -78,6 +78,9 @@
     <ClCompile Include="SafeQueue.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
+    <ClCompile Include="conf.cpp">
+      <Filter>container</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shell\include\PlatformExtensions.h">
@@ -126,6 +129,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="model_automation.hpp">
+      <Filter>container</Filter>
+    </ClInclude>
+    <ClInclude Include="conf.hpp">
       <Filter>container</Filter>
     </ClInclude>
   </ItemGroup>

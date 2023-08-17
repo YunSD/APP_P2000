@@ -101,7 +101,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
@@ -131,10 +131,12 @@
     <ClCompile Include="backends\RmlUi_Backend_Win32_GL2.cpp" />
     <ClCompile Include="backends\RmlUi_Platform_Win32.cpp" />
     <ClCompile Include="backends\RmlUi_Renderer_GL2.cpp" />
+    <ClCompile Include="conf.cpp" />
     <ClCompile Include="csv_parse.h" />
     <ClCompile Include="demo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model_am_tcp_client.cpp" />
+    <ClInclude Include="conf.hpp" />
     <ClInclude Include="model_automation.hpp" />
     <ClCompile Include="model_automation.cpp" />
     <ClCompile Include="SafeQueue.cpp" />

@@ -40,6 +40,8 @@
 #include <codecvt>
 #include "csv_parse.h"
 #include "model_automation.hpp"
+#include "INIReader.h"
+#include "conf.hpp"
 
 static const Rml::String sandbox_default_rcss = R"(
 body { top: 0; left: 0; right: 0; bottom: 0; overflow: hidden auto; }
@@ -59,6 +61,7 @@ scrollbarhorizontal sliderbar:active { background: #666; }
 
 // 全局变量池：启动时进行扫描
 static std::vector<sensor*> sensor_list;
+static CONFIG::conf* conf_;
 
 const static int parse_sensor() {
 	const static std::string filename = "sensor.csv";
@@ -84,6 +87,26 @@ const static int parse_sensor() {
 	return 0;
 }
 
+const static int load_conf() {
+	const static std::string filename = "conf.ini";
+	INIReader reader(filename);
+
+	static string UNKNOWN = "UNKNOWN";
+	string ip = reader.Get("remote", "ip", UNKNOWN);
+	string port = reader.Get("remote", "port", UNKNOWN);
+	string model = reader.Get("conf", "model", UNKNOWN);
+
+	if (ip == UNKNOWN || port == UNKNOWN || model == UNKNOWN)
+	{
+		return 0;
+	}
+
+	CONFIG::conf* conf = new CONFIG::conf(ip, port, model);
+	conf_ = conf;
+
+	return 1;
+}
+
 const static std::string p_green = "div-li-green";
 const static std::string p_red = "div-li-red";
 const static std::string block_red = "div-li-red-block";
@@ -102,49 +125,53 @@ public:
 			//document->GetElementById("title")->SetInnerRML(title);
 			//document->GetElementById("").
 			if (auto tabset = static_cast<Rml::ElementTabSet*>(document->GetElementById("menu"))) {
-				// 如果是生产模式，禁止进行配置
-				//tabset->RemoveTab(1);
-			}
-			if (auto target = document->GetElementById("monitor_panel") ) {
-				
-				if(auto select_source = static_cast<Rml::ElementFormControlSelect*>(document->GetElementById("select_sensor_list"))){
-					// 初始化界面
-					std::stringstream ss;
-					for (std::vector<sensor*>::iterator it = sensor_list.begin(); it != sensor_list.end(); ++it) {
-						ss.str("");
-						ss << "sensor-div" << (*it)->index;
-						Rml::ElementPtr div_ptr = document->CreateElement("div");
-						div_ptr->SetClassNames(p_green);
-						div_ptr->SetId(ss.str());
-
-						ss.str("");
-						ss << "sensor-block" << (*it)->index;
-						Rml::ElementPtr div_block_ptr = document->CreateElement("div");
-						div_block_ptr->SetClassNames(block_red);
-						div_block_ptr->SetId(ss.str());
-
-						Rml::ElementPtr div_block_p_ptr = document->CreateElement("div");
-						div_block_p_ptr->SetClassNames("div-li-p");
-
-						ss.str("");
-						ss << u8"传感器-" << (*it)->index << u8"：" << (*it)->host;
-						Rml::ElementPtr p_ptr = document->CreateElement("p");
-						p_ptr->SetInnerRML(ss.str());
-
-						div_block_p_ptr->AppendChild(std::move(p_ptr));
-						div_ptr->AppendChild(std::move(div_block_ptr));
-						div_ptr->AppendChild(std::move(div_block_p_ptr));
-
-						target->AppendChild(std::move(div_ptr));
-
-						// 初始化
-						ss.str("");
-						ss << u8"传感器 - " << (*it)->index << u8"：" << (*it)->host;
-						select_source->Add(ss.str(), std::to_string((*it)->index));
-					}
+				if (conf_ && conf_->model_ == "1")
+				{
+					// 如果是生产模式，禁止进行配置
+					tabset->RemoveTab(1);
 				}
 			}
-			
+			if (auto target = document->GetElementById("monitor_panel") ) {
+				// 初始化界面
+				std::stringstream ss;
+				for (std::vector<sensor*>::iterator it = sensor_list.begin(); it != sensor_list.end(); ++it) {
+					ss.str("");
+					ss << "sensor-div" << (*it)->index;
+					Rml::ElementPtr div_ptr = document->CreateElement("div");
+					div_ptr->SetClassNames(p_green);
+					div_ptr->SetId(ss.str());
+
+					ss.str("");
+					ss << "sensor-block" << (*it)->index;
+					Rml::ElementPtr div_block_ptr = document->CreateElement("div");
+					div_block_ptr->SetClassNames(block_red);
+					div_block_ptr->SetId(ss.str());
+
+					Rml::ElementPtr div_block_p_ptr = document->CreateElement("div");
+					div_block_p_ptr->SetClassNames("div-li-p");
+
+					ss.str("");
+					ss << u8"传感器-" << (*it)->index << u8"：" << (*it)->host;
+					Rml::ElementPtr p_ptr = document->CreateElement("p");
+					p_ptr->SetInnerRML(ss.str());
+
+					div_block_p_ptr->AppendChild(std::move(p_ptr));
+					div_ptr->AppendChild(std::move(div_block_ptr));
+					div_ptr->AppendChild(std::move(div_block_p_ptr));
+
+					target->AppendChild(std::move(div_ptr));
+				}
+				
+			}
+			if (auto select_source = static_cast<Rml::ElementFormControlSelect*>(document->GetElementById("select_sensor_list"))) {
+				std::stringstream ss;
+				for (std::vector<sensor*>::iterator it = sensor_list.begin(); it != sensor_list.end(); ++it) {
+					// 初始化
+					ss.str("");
+					ss << u8"传感器 - " << (*it)->index << u8"：" << (*it)->host;
+					select_source->Add(ss.str(), std::to_string((*it)->index));
+				}
+			}
 
 			// Add sandbox default text.
 			if (auto source = static_cast<Rml::ElementFormControl*>(document->GetElementById("sandbox_rml_source")))
@@ -496,6 +523,13 @@ int main(int /*argc*/, char** /*argv*/)
 	if (!parse_sensor()) {
 		return -1;
 	}
+
+	Log::SPDLOG::LOG_DEBUG("LOAD CONF");
+	if (!load_conf()) {
+		Log::SPDLOG::LOG_ERROR("LOAD CONF ERROR");
+		return -1;
+	}
+	
 
 	// Constructs the system and render interfaces, creates a window, and attaches the renderer.
 	if (!Backend::Initialize("P2000 Demo", width, height, false))

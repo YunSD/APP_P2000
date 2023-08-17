@@ -97,3 +97,34 @@
 [2023-08-17 14:49:34.793] [debug] [5324] [ :] Shell::Initialize
 [2023-08-17 14:52:04.711] [debug] [16152] [ :] Shell::Initialize
 [2023-08-17 14:53:24.282] [debug] [14848] [ :] Shell::Initialize
+[2023-08-17 15:57:18.923] [debug] [23232] [ :] Shell::Initialize
+[2023-08-17 16:09:48.610] [debug] [4684] [ :] Shell::Initialize
+[2023-08-17 16:10:47.916] [debug] [25828] [ :] Shell::Initialize
+[2023-08-17 16:11:40.500] [debug] [15676] [ :] Shell::Initialize
+[2023-08-17 16:11:57.313] [debug] [25112] [ :] Shell::Initialize
+[2023-08-17 16:12:04.496] [debug] [26008] [ :] Shell::Initialize
+[2023-08-17 16:16:47.270] [debug] [16352] [ :] Shell::Initialize
+[2023-08-17 16:16:47.273] [debug] [16352] [ :] LOAD CONF
+[2023-08-17 16:16:47.274] [error] [16352] [ :] LOAD CONF ERROR
+[2023-08-17 16:16:55.833] [debug] [20060] [ :] Shell::Initialize
+[2023-08-17 16:16:55.835] [debug] [20060] [ :] LOAD CONF
+[2023-08-17 16:16:55.835] [error] [20060] [ :] LOAD CONF ERROR
+[2023-08-17 16:31:18.573] [debug] [28520] [ :] Shell::Initialize
+[2023-08-17 16:31:18.575] [debug] [28520] [ :] LOAD CONF
+[2023-08-17 16:31:18.576] [error] [28520] [ :] LOAD CONF ERROR
+[2023-08-17 16:32:06.985] [debug] [15412] [ :] Shell::Initialize
+[2023-08-17 16:32:06.988] [debug] [15412] [ :] LOAD CONF
+[2023-08-17 16:32:24.154] [debug] [25684] [ :] Shell::Initialize
+[2023-08-17 16:32:24.156] [debug] [25684] [ :] LOAD CONF
+[2023-08-17 16:34:43.697] [debug] [13832] [ :] Shell::Initialize
+[2023-08-17 16:34:43.699] [debug] [13832] [ :] LOAD CONF
+[2023-08-17 16:35:04.119] [debug] [10956] [ :] Shell::Initialize
+[2023-08-17 16:35:04.120] [debug] [10956] [ :] LOAD CONF
+[2023-08-17 16:35:19.536] [debug] [19564] [ :] Shell::Initialize
+[2023-08-17 16:35:19.540] [debug] [19564] [ :] LOAD CONF
+[2023-08-17 16:35:38.967] [debug] [16812] [ :] Shell::Initialize
+[2023-08-17 16:35:38.969] [debug] [16812] [ :] LOAD CONF
+[2023-08-17 16:38:40.628] [debug] [10976] [ :] Shell::Initialize
+[2023-08-17 16:38:40.630] [debug] [10976] [ :] LOAD CONF
+[2023-08-17 16:39:04.965] [debug] [25424] [ :] Shell::Initialize
+[2023-08-17 16:39:04.969] [debug] [25424] [ :] LOAD CONF
