@@ -3,12 +3,17 @@
 
 using namespace std;
 
-model_am_tcp_client::model_am_tcp_client(asio::io_context& io_context, sensor *sens)
-    : socket_(io_context), sensor_(sens), heartbeat_timer_(io_context)
+model_am_tcp_client::model_am_tcp_client(asio::io_context* io_context_, sensor *sens)
+    : socket_(*io_context_), sensor_(sens), heartbeat_timer_(*io_context_), io_context(io_context_)
 { 
-    tcp::resolver* r = new tcp::resolver(io_context);
+    tcp::resolver* r = new tcp::resolver(*io_context);
     vector<string> address{StrUtil::explode(sens->host, ':')};
     endpoints_ = r->resolve(address[0], address[1]);
+}
+
+model_am_tcp_client::~model_am_tcp_client() {
+    if (NULL == worker) delete worker;
+    if (NULL == io_context) delete io_context;
 }
 
 // Called by the user of the client class to initiate the connection process.
@@ -18,11 +23,18 @@ void model_am_tcp_client::start()
     // Start the connect actor.
     start_connect(endpoints_.begin());
 
+    // work
+    worker = new std::thread(&model_am_tcp_client::worker_process, this);
+
 // Start the deadline actor. You will note that we're not setting any
 // particular deadline here. Instead, the connect and input actors will
 // update the deadline prior to each asynchronous operation.
 // deadline_.async_wait(std::bind(&client::check_deadline, this));
 }
+
+void model_am_tcp_client::worker_process() {
+    io_context->run();
+};
 
 // This function terminates all the actors to shut down the connection. It
 // may be called by the user of the client class, or by the class itself in
@@ -42,6 +54,12 @@ void model_am_tcp_client::stop(bool flag)
         socket_.async_connect(endpoints_->endpoint(),
             std::bind(&model_am_tcp_client::handle_connect,
                 this, _1, endpoints_));
+    }
+    else {
+        io_context->stop();
+        if(worker) worker->join();
+        // 移除
+        delete worker;
     }
 }
 
@@ -117,9 +135,11 @@ void model_am_tcp_client::start_read()
     //deadline_.expires_after(std::chrono::seconds(30));
 
     // Start an asynchronous operation to read a newline-delimited message.
-    asio::async_read_until(socket_,
-        asio::dynamic_buffer(input_buffer_), '\n',
+    asio::async_read(socket_, asio::buffer(package_head), 
         std::bind(&model_am_tcp_client::handle_read, this, _1, _2));
+    //asio::async_read_until(socket_,
+    //    asio::dynamic_buffer(input_buffer_), '\n',
+    //    std::bind(&model_am_tcp_client::handle_read, this, _1, _2));
 }
 
 void model_am_tcp_client::handle_read(const std::error_code& error, std::size_t n)
@@ -128,16 +148,30 @@ void model_am_tcp_client::handle_read(const std::error_code& error, std::size_t 
         return;
 
     if (!error)
-    {
-        // Extract the newline-delimited message from the buffer.
-        std::string line(input_buffer_.substr(0, n - 1));
-        input_buffer_.erase(0, n);
+    {   
+        // get len
+        u_int len = (u_int)package_head[1];
+
+        u_char* data = new u_char[len];
+
+        // 全部读取
+        try {
+            asio::read(socket_, asio::buffer(data, len));
+            sensor_->put_temporary(data, len);
+        }
+        catch (...) {
+            stop();
+        }
+        
+        
+        // reset
+        //package_head.erase(0, n);
 
         // Empty messages are heartbeats and so ignored.
-        if (!line.empty())
+        /*if (!line.empty())
         {
             std::cout << "Received: " << line << "\n";
-        }
+        }*/
 
         start_read();
     }

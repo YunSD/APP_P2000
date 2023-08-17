@@ -72,9 +72,6 @@
     <ClCompile Include="model_automation.cpp">
       <Filter>container</Filter>
     </ClCompile>
-    <ClCompile Include="model_automation.hpp">
-      <Filter>container</Filter>
-    </ClCompile>
     <ClCompile Include="model_am_tcp_client.cpp">
       <Filter>net</Filter>
     </ClCompile>
@@ -127,6 +124,9 @@
     </ClInclude>
     <ClInclude Include="SafeQueue.hpp">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="model_automation.hpp">
+      <Filter>container</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,9 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "asio/buffer.hpp"
 #include "asio/io_context.hpp"
 #include "asio/ip/tcp.hpp"
 #include "asio/read_until.hpp"
+#include "asio/read.hpp"
 #include "asio/steady_timer.hpp"
 #include "asio/write.hpp"
 #include "sensor.hpp"
@@ -80,7 +81,8 @@ using std::placeholders::_2;
 class model_am_tcp_client
 {
 public:
-    model_am_tcp_client(asio::io_context& io_context, sensor *sens);
+    model_am_tcp_client(asio::io_context* io_context, sensor *sens);
+    ~model_am_tcp_client();
 
     // Called by the user of the client class to initiate the connection process.
     // The endpoints will have been obtained using a tcp::resolver.
@@ -111,8 +113,14 @@ private:
     bool stopped_ = false;
     tcp::resolver::results_type endpoints_;
     tcp::socket socket_;
-    std::string input_buffer_;
+    // package_head
+    u_char package_head[2];
     sensor *sensor_;
+
+    std::thread* worker;
+    asio::io_context* io_context;
+
+    void worker_process();
 
     steady_timer heartbeat_timer_;
 };

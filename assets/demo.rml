@@ -614,279 +614,66 @@ progress {
 
 <body template="window">
 
-<tabset id="menu" onclick="aaa">
-<tab>自动模式</tab>
-<panel id="welcome1">
+<tabset id="menu">
+<tab onclick="auto_model">自动模式</tab>
+<panel id="auto_model">
 	<h1>传感器状态监控：</h1>
 	<div id="monitor_panel" style="width:100%;height:60%;">
 	</div>
 	<h1>服务器状态监控（192.88.32.1）：<span style="color:red;">断开</span></h1>
 </panel>
-<tab>配置模式</tab>
+<tab onclick="config_model">配置模式</tab>
 <panel id="config_model">
-	<h1>Gradient decorator</h1>
-	<p>The 'gradient' decorator renders a color gradient in the vertical or horizontal direction.</p>
-	<div class="center">
-		<button disabled class="gradient">Gradient</button>
-		<button class="gradient horizontal">Gradient</button>
-	</div>
-	
-	<h1>Image decorator</h1>
-	<p>The 'image' decorator applies an image to the background of an element. By default it stretches the image to the size of the element, but this behavior can be controlled as seen later on.</p>
-	<div class="center">
-		<div class="side-by-side">
-			<div class="image-alien clickable" onclick="change_color"/>
-		</div>
-		<div class="side-by-side">
-			<div class="image-invader"/>
-		</div>
-		<div class="side-by-side">
-			<button>Button</button>
-		</div>
-	</div>
-	
-	<h1>Tiled-horizontal decorator</h1>
-	<p>The 'tiled-horizontal' decorator separates an image into three parts, with the edges displayed at their native size while the middle part is stretched to cover the remaining width of the element. In each of the following examples an image is displayed at its native size first, and then the decorator is applied to it with its element stretched horizontally.</p>
-	<div class="side-by-side">
-		<div style="width: 30dp; height: 30dp; decorator: image( radio );"/>
-		<div style="width: 120dp; height: 30dp; decorator: tiled-horizontal( demo-radio-l, demo-radio-m, demo-radio-r );"/>
-	</div>
-	<div class="side-by-side">
-		<div style="width: 30dp; height: 30dp; decorator: image( checkbox );"/>
-		<div style="width: 120dp; height: 30dp; decorator: tiled-horizontal( demo-checkbox-l, demo-checkbox-m, demo-checkbox-r );"/>
-	</div>
-	<div class="side-by-side" width="250dp;">
-		<div style="width: 96dp; height: 85dp; decorator: image( demo-title-bar );"/>
-		<div style="width: 250dp; height: 85dp; decorator: tiled-horizontal( title-bar-l, title-bar-c, title-bar-r );"/>
-	</div>
-	<p>In the third example we show the same title bar that is used to style the sample windows.</p>
-	
-
-	<h1>Tiled-vertical decorator</h1>
-	<p>The 'tiled-vertical' decorator behaves like tiled-horizontal, but this time it is stretched vertically.</p>
-	<div class="side-by-side">
-		<div style="width: 30dp; height: 30dp; decorator: image( radio );"/>
-		<div style="width: 30dp; height: 80dp; decorator: tiled-vertical( demo-radio-t, demo-radio-c, demo-radio-b );"/>
-	</div>
-	<div class="side-by-side">
-		<div style="width: 30dp; height: 30dp; decorator: image( checkbox );"/>
-		<div style="width: 30dp; height: 80dp; decorator: tiled-vertical( demo-checkbox-t, demo-checkbox-c, demo-checkbox-b );"/>
-	</div>
-	<div class="side-by-side">
-		<div style="width: 30dp; height: 30dp; decorator: image( checkbox-checked );"/>
-		<div style="width: 30dp; height: 80dp; decorator: tiled-vertical( demo-checked-t, demo-checked-c, demo-checked-b );"/>
-	</div>
-	<div class="side-by-side">
-		<div style="width: 51dp; height: 39dp; decorator: image( icon-help );"/>
-		<div style="width: 51dp; height: 80dp; decorator: tiled-vertical( demo-help-t, demo-help-c, demo-help-b );"/>
-	</div>
-	<p>Clearly, not all images are designed to stretch like this. However, one can certainly envision a usage for the first two examples.</p>
-	
-	<h1>Tiled-box decorator</h1>
-	<p>The 'tiled-box' decorator lays out a 3x3 grid within the element, each of the nine parts being filled with a separate sprite or image. The corners stay fixed in size, while the center and edges are stretched to fill the remaining size of the element.</p>
-	<p>The following image displays the region used to define the background of the window in this sample.</p>
-	<img sprite="window-outer"/>
-	<p>The decorator's element can then gracefully be sized in any direction, keeping the corners and edges at a proper size.</p>
-	<div class="tiled-box"/>
-	
-	<h1>Ninepatch decorator</h1>
-	<p>The 'ninepatch' decorator is similar to the tiled-box decorator in that it splits the image into nine parts. However, only two sprites are used to define all nine tiles, an outer sprite and an inner sprite.</p>
-	
-	<p>Let us define the outer sprite by the following image, and the inner sprite as the part within the displayed border.</p>
-	<div style="position: relative; text-align: left; width: 145dp;">
-		<img sprite="textarea"/><img sprite="textarea-inner" style="position: absolute; left: 10dp; top: 13dp; border: 1dp #f0f;"/>
-	</div>
-	
-	<p>When the ninepatch decorator is applied and the element is stretched, the following is rendered.</p>
-	<div style="width: 240dp; height: 50dp; decorator: ninepatch(textarea, textarea-inner, 1.0);"/>
-	<p>Notice that the corners stay fixed, and the inner sprite is stretched. We can also control the rendered size of the edges, here the left edge is displayed at its native size and the others at half their size.</p>
-	<div style="width: 240dp; height: 50dp; decorator: ninepatch(textarea, textarea-inner, .5 .5 .5 1);"/>
-	
-	<p>If we instead compare this to the image decorator, we see the following.</p>
-	<div style="width: 240dp; height: 50dp; decorator: image(textarea);"/>
-	<p>With the image decorator it looks blurry and its borders are stretched.</p>
-	
-	<div style="width: 850dp; margin-left: -175dp;">
-		<h1>Image decorator fit modes</h1>
-		<div class="image-mode">
-			<div class="fit-fill"><p>fill</p></div>
-			<div class="fit-contain"><p>contain</p></div>
-			<div class="fit-cover"><p>cover</p></div>
-			<div class="fit-scale-none"><p>scale-none</p></div>
-			<div class="fit-scale-down"><p>scale-down</p></div>
-		</div>
-		<div class="image-mode small">
-			<div class="fit-fill"></div>
-			<div class="fit-contain"></div>
-			<div class="fit-cover"></div>
-			<div class="fit-scale-none"></div>
-			<div class="fit-scale-down"></div>
-		</div>
-		<h1>Image decorator alignment modes</h1>
-		<div class="image-mode">
-			<div class="align-default"><p style="font-style: italic;">default</p></div>
-			<div class="align-right"><p>right</p></div>
-			<div class="align-left-bottom"><p>left bottom</p></div>
-			<div class="align-percent"><p>70% 30%</p></div>
-			<div class="align-pixel"><p>100px -15px</p></div>
-			<p class="center" style="margin: 0.3em 0 0 0;">Using fit mode 'scale-none'.</p>
-		</div>
-		<h1>Tiled decorators orientation</h1>
-		<p>Orientation can be applied to every tile individually in the 'image', 'tiled-horizontal', 'tiled-vertical', and 'tiled-box' decorators.</p>
-		<div class="image-mode">
-			<div class="orientation-vertical"><p>flip-vertical</p></div>
-			<div class="orientation-horizontal"><p>flip-horizontal</p></div>
-			<div class="orientation-rotate"><p>rotate-180</p></div>
-		</div>
-	</div>
-
-	<h1>Image elements</h1>
-	<div class="center">
-		<img src="../../../assets/high_scores_defender.tga" class="clickable" onclick="change_color"/>
-		<img sprite="icon-game" style="vertical-align: 10dp;"/>
-		<img src="../../../assets/high_scores_defender.tga" style="image-color: #fc5;" rect="0 0 64 64"/>
-		<img src="../../../assets/high_scores_defender.tga" style="image-color: #9c5;" rect="64 0 64 64"/>
-	</div>
-	<p>The 'img' elements are separate from decorators, but we describe them here for completeness. They can be declared as in html. Additionally, a 'rect' attribute can be used to crop the image. The element can also display sprites declared in a sprite sheet.</p>
-	
-	<h1>Sprite sheets</h1>
-	<p>Sprite sheets are defined by an image source and a collection of sprites, and can be declared in RCSS. Sprites are essentially rectangles into the given image. For example, the following image</p>
-	<img src="../../../assets/invader.tga" rect="0 0 500 435" style="margin-top: 10dp; margin-bottom: 10dp;"/>
-	<p>is used to render most sprites in this demo. Sprites can be used in decorators and image elements as if they were separate images.</p>
-</panel>
-<tab>Font effects</tab>
-<panel id="font_effects">
-	<h1>None</h1>
-	<div class="original">RmlUi 😍</div>
-	<h1>Glow</h1>
-	<div class="glow">RmlUi 😍</div>
-	<div class="glow_sharper">RmlUi 😍</div>
-	<div class="glow_blurry">RmlUi 😍</div>
-	<div class="glow_shadow">RmlUi 😍</div>
-	<h1>Outline</h1>
-	<div class="outline_small">RmlUi 😍</div>
-	<div class="outline_big">RmlUi 😍</div>
-	<h1>Shadow</h1>
-	<div class="shadow_up">RmlUi 😍</div>
-	<div class="shadow_down">RmlUi 😍</div>
-	<h1>Blur</h1>
-	<div class="blur_small">RmlUi 😍</div>
-	<div class="blur_big">RmlUi 😍</div>
-</panel>
-<tab>Animations</tab>
-<panel id="animations">
-	
-	<h1>Transitions</h1>
-	<p>Hover over the following to see an animation performed by the transition property in RCSS.</p>
-	<div id="transition">
-		<img class="alien alien1" src="../../../assets/high_scores_alien_1.tga"/>
-		<img class="alien alien2" src="../../../assets/high_scores_alien_2.tga"/>
-		<img class="alien alien3" src="../../../assets/high_scores_alien_3.tga"/>
-		<div class="ray"><img class="defender" src="../../../assets/high_scores_defender.tga"/></div>
-		<div style="height: 110%;"/>
-	</div>
-	
-	<h1>Tweening functions</h1>
-	<p>Set animation parameters below and click on the background or the flag.</p>
-	<div id="tweening_area" onclick="move_child">
-		<img sprite="icon-flag" onclick="change_color"/>
-	</div>
-	<select name="tween_function" onchange="tween_function">
-		<option value="linear" selected>Tweening function</option>
-		<option value="back">Back</option>
-		<option value="bounce">Bounce</option>
-		<option value="circular">Circular</option>
-		<option value="cubic">Cubic</option>
-		<option value="elastic">Elastic</option>
-		<option value="exponential">Exponential</option>
-		<option value="linear">Linear</option>
-		<option value="quadratic">Quadratic</option>
-		<option value="quartic">Quartic</option>
-		<option value="quintic">Quintic</option>
-		<option value="sine">Sine</option>
-	</select>
-	<select name="tween_direction" onchange="tween_direction">
-		<option value="out" selected>Direction</option>
-		<option value="in">In</option>
-		<option value="out">Out</option>
-		<option value="in-out">In-Out</option>
-	</select>
-	<div>
-		<input type="range" style="width: 150dp; margin-right: 1em;" min="0" max="2" step="0.05" value="0.5" onchange="tween_duration"/> 
-		Duration <span id="duration">0.50</span> s
-	</div>
-	
-	<h1>Cube</h1>
-	<p>The cube is transformed and animated entirely in RCSS using the @keyframes at-rule.</p>
-	<div class="cube_container">
-		<div class="cube">
-			<div class="face back">6</div>
-			<div class="face top">5</div>
-			<div class="face left">4</div>
-			<div class="face bottom">3</div>
-			<div class="face right">2</div>
-			<div class="face front">1</div>
-		</div>
-	</div>
-</panel>
-<tab>Forms</tab>
-<panel id="controls">
-	<form disabled onsubmit="submit_form">
-		<h2>Full name</h2>
-		<div>
-			<input class="two-wide" type="text" name="name"/>
-		</div>
-		<h2>Email and password</h2>
-		<div>
-			<input type="text" name="email"/>
-			<input type="password" name="password"/>
-		</div>
-		<h2>Favorite animal</h2>
-		<div>
-			<label><input type="radio" name="animal" value="dog" checked/> Dog </label>
-			<label><input type="radio" name="animal" value="cat"/> Cat </label>
-			<label><input type="radio" name="animal" value="narwhal"/> Narwhal </label>
-			<label><input type="radio" name="animal" value="no"/> I don't like animals </label>
-		</div>
-		<h2>Favorite meals</h2>
-		<div>
-			<label><input type="checkbox" name="meals" value="pizza" checked/> Pizza </label>
-			<label><input type="checkbox" name="meals" value="pasta" checked/> Pasta </label>
-			<label><input type="checkbox" name="meals" value="lasagne" checked/> Lasagne </label>
-		</div>
-		<h2>Rating</h2>
-		<div>
-			<input type="range" name="rating" min="0" max="100" step="1" value="50" onchange="rating"/> <span id="rating"/><span id="rating_emoji">&nbsp;</span>
-		</div>
-		<h2>Subject</h2>
-		<div>
-			<select name="subject">
-				<option value="none" selected>Choose your subject</option>
-				<option value="feature">Feature request</option>
-				<option value="bug">Bug report</option>
-				<option value="praise">Praise</option>
-				<option value="criticism">Criticism</option>
+	<h1>选择传感器</h1>
+	<p>从左侧下拉菜单选中对应传感器，连接成功后方可进行检索操作。</p>
+	<div style="height:70dp;width:auto;">
+		<div style="height:70dp;width:auto;float:left;">
+			<select id="select_sensor_list" name="subject" style="width:300dp; margin-top:15dp;">
 			</select>
 		</div>
-		<h2>Message</h2>
-		<div>
-			<textarea cols="25" rows="4" name="message">😍 Hello 🌐 World! 😎</textarea>
+		<div style="height:70dp;width:auto;float:left;">
+			<div style="margin-top:12dp;">
+				<button class="gradient" onclick="cm_connect">连接</button>
+				<button class="gradient" onclick="cm_search">检索</button>
+				<button class="gradient" onclick="cm_close">关闭</button>
+			</div>
 		</div>
-		<div style="margin-bottom: 15dp;">
-			<input type="submit">Submit</input>
+	</div>
+	<h1>传感器标签写入</h1>
+	<p>从左侧下拉菜单选中对应标签，在右侧输入框中输入需要写入的新编码，然后点击写入即可。</p>
+	<div class="center">
+		<div style="height:70dp;width:auto;float:left;">
+			<select id="select_sensor_code_list" style="width:300dp; margin-top:15dp;">
+			</select>
 		</div>
-		<div id="submit_progress" style="display: none;">
-			<p id="progress_label">&nbsp;</p>
-			<progress id="gauge" direction="clockwise" start-edge="bottom" value="0.0">
-				<div id="gauge_value">50%</div>
-			</progress>
-			<progress id="progress_horizontal" direction="right" value="0.0"/>
-			<div id="progress_value">50%</div>
-			<h2>Form output</h2>
-			<div id="form_output"></div>
+		<div style="height:70dp;width:auto;float:left;">
+			<input type="text" name="new_code" style="width:300dp; margin-top:15dp;"/>
 		</div>
-	</form>
+		<div style="height:70dp;width:auto;float:left;">
+			<div style="margin-top:12dp;">
+				<button class="gradient" onclick="cm_write_value">写入</button>
+			</div>
+		</div>
+	</div>
+	
+	<h1>传感器蜂鸣设置</h1>
+	<div class="center">
+		<div style="height:70dp;width:auto;float:left;">
+			<select id="select_sensor_list" name="subject" style="width:300dp; margin-top:15dp;">
+				<option value="1" selected>保持安静</option>
+				<option value="2" selected>读到标签时蜂鸣</option>
+				<option value="3" selected>未读到标签时蜂鸣</option>
+			</select>
+		</div>
+		<div style="height:70dp;width:auto;float:left;">
+			<div style="margin-top:12dp;">
+				<button class="gradient" onclick="cm_write_config">设置</button>
+			</div>
+		</div>
+	</div>
+	
 </panel>
+
 <tab>通讯日志</tab>
 <panel id="sandbox">
 	<table>

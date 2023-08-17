@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "sensor.hpp"
 #include <vector>
@@ -21,8 +21,6 @@ private:
     std::thread* worker;
 
     std::vector<model_am_tcp_client*> client_list;
-
-    asio::io_context io_context;
 
     void worker_process();
 };

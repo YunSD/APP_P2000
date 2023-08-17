@@ -57,8 +57,9 @@ scrollbarhorizontal sliderbar:hover { background: #888; }
 scrollbarhorizontal sliderbar:active { background: #666; }
 )";
 
-
+// 全局变量池：启动时进行扫描
 static std::vector<sensor*> sensor_list;
+
 const static int parse_sensor() {
 	const static std::string filename = "sensor.csv";
 	try {
@@ -104,37 +105,43 @@ public:
 				// 如果是生产模式，禁止进行配置
 				//tabset->RemoveTab(1);
 			}
-			if (auto target = document->GetElementById("monitor_panel")) {
+			if (auto target = document->GetElementById("monitor_panel") ) {
+				
+				if(auto select_source = static_cast<Rml::ElementFormControlSelect*>(document->GetElementById("select_sensor_list"))){
+					// 初始化界面
+					std::stringstream ss;
+					for (std::vector<sensor*>::iterator it = sensor_list.begin(); it != sensor_list.end(); ++it) {
+						ss.str("");
+						ss << "sensor-div" << (*it)->index;
+						Rml::ElementPtr div_ptr = document->CreateElement("div");
+						div_ptr->SetClassNames(p_green);
+						div_ptr->SetId(ss.str());
 
-				// 初始化界面
-				std::stringstream ss;
-				for (std::vector<sensor*>::iterator it = sensor_list.begin(); it != sensor_list.end(); ++it) {
-					
-					ss.str("");
-					ss << "sensor-div" << (*it)->index;
-					Rml::ElementPtr div_ptr = document->CreateElement("div");
-					div_ptr->SetClassNames(p_green);
-					div_ptr->SetId(ss.str());
+						ss.str("");
+						ss << "sensor-block" << (*it)->index;
+						Rml::ElementPtr div_block_ptr = document->CreateElement("div");
+						div_block_ptr->SetClassNames(block_red);
+						div_block_ptr->SetId(ss.str());
 
-					ss.str("");
-					ss << "sensor-block" << (*it)->index;
-					Rml::ElementPtr div_block_ptr = document->CreateElement("div");
-					div_block_ptr->SetClassNames(block_red);
-					div_block_ptr->SetId(ss.str());
+						Rml::ElementPtr div_block_p_ptr = document->CreateElement("div");
+						div_block_p_ptr->SetClassNames("div-li-p");
 
-					Rml::ElementPtr div_block_p_ptr = document->CreateElement("div");
-					div_block_p_ptr->SetClassNames("div-li-p");
+						ss.str("");
+						ss << u8"传感器-" << (*it)->index << u8"：" << (*it)->host;
+						Rml::ElementPtr p_ptr = document->CreateElement("p");
+						p_ptr->SetInnerRML(ss.str());
 
-					ss.str("");
-					ss << u8"传感器-" << (*it)->index << u8"：" << (*it)->host;
-					Rml::ElementPtr p_ptr = document->CreateElement("p");
-					p_ptr->SetInnerRML(ss.str());
+						div_block_p_ptr->AppendChild(std::move(p_ptr));
+						div_ptr->AppendChild(std::move(div_block_ptr));
+						div_ptr->AppendChild(std::move(div_block_p_ptr));
 
-					div_block_p_ptr->AppendChild(std::move(p_ptr));
-					div_ptr->AppendChild(std::move(div_block_ptr));
-					div_ptr->AppendChild(std::move(div_block_p_ptr));
+						target->AppendChild(std::move(div_ptr));
 
-					target->AppendChild(std::move(div_ptr));
+						// 初始化
+						ss.str("");
+						ss << u8"传感器 - " << (*it)->index << u8"：" << (*it)->host;
+						select_source->Add(ss.str(), std::to_string((*it)->index));
+					}
 				}
 			}
 			
@@ -310,17 +317,6 @@ public:
 		return document;
 	}
 
-	void SubmitForm(Rml::String in_submit_message)
-	{
-		submitting = true;
-		submitting_start_time = Rml::GetSystemInterface()->GetElapsedTime();
-		submit_message = in_submit_message;
-		if (auto el_output = document->GetElementById("form_output"))
-			el_output->SetInnerRML("");
-		if (auto el_progress = document->GetElementById("submit_progress"))
-			el_progress->SetProperty("display", "block");
-	}
-
 	void SetSandboxStylesheet(const Rml::String& string)
 	{
 		if (iframe && rml_basic_style_sheet)
@@ -343,6 +339,22 @@ public:
 		}
 	}
 
+	void updateWorkModel(bool flag) {
+		if (flag)
+		{
+			if (flag != is_auto) {
+				is_auto = flag;
+				mode_a.start();
+			}
+		}
+		else {
+			if (flag != is_auto) {
+				is_auto = flag;
+				mode_a.stop();
+			}
+		}
+	}
+
 private:
 	Rml::ElementDocument* document = nullptr;
 	Rml::ElementDocument* iframe = nullptr;
@@ -353,7 +365,11 @@ private:
 	double submitting_start_time = 0;
 	Rml::String submit_message;
 
+	// true:自动模式，false:手动模式
+	bool is_auto = true;
+	// 自动模式下缓冲对象
 	model_automation mode_a;
+
 };
 
 
@@ -374,84 +390,11 @@ public:
 	{
 		using namespace Rml;
 
-		if (value == "exit")
-		{
-			// Test replacing the current element.
-			// Need to be careful with regard to lifetime issues. The event's current element will be destroyed, so we cannot
-			// use it after SetInnerRml(). The library should handle this case safely internally when propagating the event further.
-			Element* parent = element->GetParentNode();
-			parent->SetInnerRML("<button onclick='confirm_exit' onblur='cancel_exit' onmouseout='cancel_exit'>Are you sure?</button>");
-			if (Element* child = parent->GetChild(0))
-				child->Focus();
+		if (value == "auto_model") {
+			demo_window->updateWorkModel(true);
 		}
-		else if (value == "confirm_exit")
-		{
-			Backend::RequestExit();
-		}
-		else if (value == "cancel_exit")
-		{
-			if (Element* parent = element->GetParentNode())
-				parent->SetInnerRML("<button id='exit' onclick='exit'>Exit</button>");
-		}
-		else if (value == "change_color")
-		{
-			Colourb color((byte)Math::RandomInteger(255), (byte)Math::RandomInteger(255), (byte)Math::RandomInteger(255));
-			element->Animate("image-color", Property(color, Property::COLOUR), tweening_parameters.duration, Tween(tweening_parameters.type, tweening_parameters.direction));
-			event.StopPropagation();
-		}
-		else if (value == "move_child")
-		{
-			Vector2f mouse_pos(event.GetParameter("mouse_x", 0.0f), event.GetParameter("mouse_y", 0.0f));
-			if (Element* child = element->GetFirstChild())
-			{
-				Vector2f new_pos = mouse_pos - element->GetAbsoluteOffset() - Vector2f(0.35f * child->GetClientWidth(), 0.9f * child->GetClientHeight());
-				Property destination = Transform::MakeProperty({ Transforms::Translate2D(new_pos.x, new_pos.y) });
-				if (tweening_parameters.duration <= 0)
-					child->SetProperty(PropertyId::Transform, destination);
-				else
-					child->Animate("transform", destination, tweening_parameters.duration, Tween(tweening_parameters.type, tweening_parameters.direction));
-			}
-		}
-		else if (value == "tween_function")
-		{
-			static const SmallUnorderedMap<String, Tween::Type> tweening_functions = {
-				{"back", Tween::Back}, {"bounce", Tween::Bounce},
-				{"circular", Tween::Circular}, {"cubic", Tween::Cubic},
-				{"elastic", Tween::Elastic}, {"exponential", Tween::Exponential},
-				{"linear", Tween::Linear}, {"quadratic", Tween::Quadratic},
-				{"quartic", Tween::Quartic}, {"quintic", Tween::Quintic},
-				{"sine", Tween::Sine}
-			};
-
-			String value = event.GetParameter("value", String());
-			auto it = tweening_functions.find(value);
-			if (it != tweening_functions.end())
-				tweening_parameters.type = it->second;
-			else
-			{
-				RMLUI_ERROR;
-			}
-		}
-		else if (value == "tween_direction")
-		{
-			String value = event.GetParameter("value", String());
-			if (value == "in")
-				tweening_parameters.direction = Tween::In;
-			else if (value == "out")
-				tweening_parameters.direction = Tween::Out;
-			else if (value == "in-out")
-				tweening_parameters.direction = Tween::InOut;
-			else
-			{
-				RMLUI_ERROR;
-			}
-		}
-		else if (value == "tween_duration")
-		{
-			float value = (float)std::atof(static_cast<Rml::ElementFormControl*>(element)->GetValue().c_str());
-			tweening_parameters.duration = value;
-			if (auto el_duration = element->GetElementById("duration"))
-				el_duration->SetInnerRML(CreateString(20, "%2.2f", value));
+		else if (value == "config_model") {
+			demo_window->updateWorkModel(false);
 		}
 		else if (value == "rating")
 		{
@@ -495,7 +438,6 @@ public:
 			}
 			output += "</p>";
 
-			demo_window->SubmitForm(output);
 		}
 		else if (value == "set_sandbox_body")
 		{
@@ -544,7 +486,10 @@ int main(int /*argc*/, char** /*argv*/)
 	const int width = 1024;
 	const int height = 768;
 
+	// 全局日志声明
+	Log::SPDLOG::getInstance().init("logger", "DEBUG", "DEBUG", 10 * 1024 * 1024 * 100, 10, false);
 	// Initializes the shell which provides common functionality used by the included samples.
+	Log::SPDLOG::LOG_DEBUG("Shell::Initialize");
 	if (!Shell::Initialize())
 		return -1;
 

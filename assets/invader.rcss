@@ -339,7 +339,7 @@ datagrid input.text, table input.text
 select,
 dataselect
 {
-	width: 175dp;
+	width: 300dp;
 	height: 37dp;
 }
 
@@ -348,9 +348,8 @@ dataselect selectvalue
 {
 	width: auto;
 	margin-right: 30dp;
-	
 	height: 25dp;
-	padding: 12dp 10dp 0dp 10dp;
+	padding: 12dp 10dp 0dp 20dp;
 
 	decorator: image( selectvalue  );
 }
@@ -381,10 +380,10 @@ dataselect selectarrow:checked
 select selectbox,
 dataselect selectbox
 {
-	margin-left: 1dp;
+	margin-left: 10dp;
 	margin-top: -7dp;
 	margin-bottom: -10dp;
-	width: 162dp;
+	width: 350dp;
 	padding: 1dp 4dp 4dp 4dp;
 }
 
