@@ -1,5 +1,6 @@
 #pragma once
 
+#include "asio.hpp"
 #include "asio/buffer.hpp"
 #include "asio/io_context.hpp"
 #include "asio/ip/tcp.hpp"
@@ -21,10 +22,10 @@ using std::placeholders::_2;
 class model_conf_tcp_client
 {
 public:
-    model_conf_tcp_client(string host);
+    model_conf_tcp_client();
     ~model_conf_tcp_client();
 
-    void connect();
+    bool connect(string host);
 
     void read_search();
 
@@ -32,19 +33,14 @@ public:
 
     void disconnect();
 
-private:
-    void write();
-
-    void read();
-
-private:
-
-    const string host_;
     volatile bool connect_flag = false;
+
+private:
+    void write(u_char* data);
+
+    shared_ptr<u_char[]> read();
 
     asio::io_context io_context_;
     tcp::socket socket_;
-    // package_head
-    u_char command_search_label[2];
-    u_char command_write_label[2];
+    tcp::resolver::results_type endpoints_;
 };

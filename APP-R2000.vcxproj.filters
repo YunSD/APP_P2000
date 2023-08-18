@@ -81,6 +81,15 @@
     <ClCompile Include="conf.cpp">
       <Filter>container</Filter>
     </ClCompile>
+    <ClCompile Include="model_conf_tcp_client.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="model_am_up_tcp_client.cpp">
+      <Filter>net</Filter>
+    </ClCompile>
+    <ClCompile Include="model_conf.cpp">
+      <Filter>container</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shell\include\PlatformExtensions.h">
@@ -132,6 +141,15 @@
       <Filter>container</Filter>
     </ClInclude>
     <ClInclude Include="conf.hpp">
+      <Filter>container</Filter>
+    </ClInclude>
+    <ClInclude Include="model_conf_tcp_client.hpp">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="model_am_up_tcp_client.hpp">
+      <Filter>net</Filter>
+    </ClInclude>
+    <ClInclude Include="model_conf.hpp">
       <Filter>container</Filter>
     </ClInclude>
   </ItemGroup>

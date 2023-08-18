@@ -12,8 +12,8 @@ model_am_tcp_client::model_am_tcp_client(asio::io_context* io_context_, sensor *
 }
 
 model_am_tcp_client::~model_am_tcp_client() {
-    if (NULL == worker) delete worker;
-    if (NULL == io_context) delete io_context;
+    /*if (NULL == worker) delete worker;*/
+    delete io_context;
 }
 
 // Called by the user of the client class to initiate the connection process.

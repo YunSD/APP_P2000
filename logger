@@ -128,3 +128,57 @@
 [2023-08-17 16:38:40.630] [debug] [10976] [ :] LOAD CONF
 [2023-08-17 16:39:04.965] [debug] [25424] [ :] Shell::Initialize
 [2023-08-17 16:39:04.969] [debug] [25424] [ :] LOAD CONF
+[2023-08-18 11:10:13.914] [debug] [15936] [ :] Shell::Initialize
+[2023-08-18 11:10:13.918] [debug] [15936] [ :] LOAD CONF
+[2023-08-18 11:18:46.256] [debug] [21372] [ :] Shell::Initialize
+[2023-08-18 11:18:46.258] [debug] [21372] [ :] LOAD CONF
+[2023-08-18 11:21:25.922] [debug] [16352] [ :] Shell::Initialize
+[2023-08-18 11:21:25.925] [debug] [16352] [ :] LOAD CONF
+[2023-08-18 13:54:27.728] [debug] [29436] [ :] Shell::Initialize
+[2023-08-18 13:54:27.730] [debug] [29436] [ :] LOAD CONF
+[2023-08-18 13:56:41.647] [debug] [6396] [ :] Shell::Initialize
+[2023-08-18 13:56:41.649] [debug] [6396] [ :] LOAD CONF
+[2023-08-18 13:57:25.609] [debug] [24888] [ :] Shell::Initialize
+[2023-08-18 13:57:25.612] [debug] [24888] [ :] LOAD CONF
+[2023-08-18 14:00:06.147] [debug] [22704] [ :] Shell::Initialize
+[2023-08-18 14:00:06.150] [debug] [22704] [ :] LOAD CONF
+[2023-08-18 14:00:51.825] [debug] [8740] [ :] Shell::Initialize
+[2023-08-18 14:00:51.827] [debug] [8740] [ :] LOAD CONF
+[2023-08-18 14:11:42.328] [debug] [19692] [ :] Shell::Initialize
+[2023-08-18 14:11:42.330] [debug] [19692] [ :] LOAD CONF
+[2023-08-18 14:12:47.245] [debug] [26140] [ :] Shell::Initialize
+[2023-08-18 14:12:47.248] [debug] [26140] [ :] LOAD CONF
+[2023-08-18 14:13:50.572] [debug] [31276] [ :] Shell::Initialize
+[2023-08-18 14:13:50.574] [debug] [31276] [ :] LOAD CONF
+[2023-08-18 14:24:13.380] [debug] [30620] [ :] Shell::Initialize
+[2023-08-18 14:24:13.383] [debug] [30620] [ :] LOAD CONF
+[2023-08-18 14:27:02.950] [debug] [33768] [ :] Shell::Initialize
+[2023-08-18 14:27:02.952] [debug] [33768] [ :] LOAD CONF
+[2023-08-18 14:37:31.270] [debug] [26996] [ :] Shell::Initialize
+[2023-08-18 14:37:31.273] [debug] [26996] [ :] LOAD CONF
+[2023-08-18 14:37:49.289] [debug] [26236] [ :] Shell::Initialize
+[2023-08-18 14:37:49.291] [debug] [26236] [ :] LOAD CONF
+[2023-08-18 14:37:59.171] [debug] [34340] [ :] Shell::Initialize
+[2023-08-18 14:37:59.173] [debug] [34340] [ :] LOAD CONF
+[2023-08-18 14:43:50.615] [debug] [2204] [ :] Shell::Initialize
+[2023-08-18 14:43:50.617] [debug] [2204] [ :] LOAD CONF
+[2023-08-18 14:44:46.943] [debug] [18984] [ :] Shell::Initialize
+[2023-08-18 14:44:46.945] [debug] [18984] [ :] LOAD CONF
+[2023-08-18 14:49:17.493] [debug] [33564] [ :] Shell::Initialize
+[2023-08-18 14:49:17.495] [debug] [33564] [ :] LOAD CONF
+[2023-08-18 14:54:00.075] [debug] [19300] [ :] Shell::Initialize
+[2023-08-18 14:54:00.078] [debug] [19300] [ :] LOAD CONF
+[2023-08-18 14:57:05.154] [debug] [31092] [ :] Shell::Initialize
+[2023-08-18 14:57:05.156] [debug] [31092] [ :] LOAD CONF
+[2023-08-18 15:00:35.363] [debug] [22844] [ :] Shell::Initialize
+[2023-08-18 15:00:35.365] [debug] [22844] [ :] LOAD CONF
+[2023-08-18 15:10:28.246] [debug] [29880] [ :] Shell::Initialize
+[2023-08-18 15:10:28.250] [debug] [29880] [ :] LOAD CONF
+[2023-08-18 15:11:56.457] [debug] [28772] [ :] Shell::Initialize
+[2023-08-18 15:11:56.460] [debug] [28772] [ :] LOAD CONF
+[2023-08-18 16:30:38.255] [debug] [19480] [ :] Shell::Initialize
+[2023-08-18 16:30:38.258] [debug] [19480] [ :] LOAD CONF
+[2023-08-18 16:30:47.338] [debug] [30384] [ :] Shell::Initialize
+[2023-08-18 16:30:47.341] [debug] [30384] [ :] LOAD CONF
+[2023-08-18 16:36:28.119] [debug] [11124] [ :] Shell::Initialize
+[2023-08-18 16:36:28.121] [debug] [11124] [ :] LOAD CONF

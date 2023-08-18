@@ -137,8 +137,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="model_am_tcp_client.cpp" />
     <ClInclude Include="conf.hpp" />
+    <ClInclude Include="model_am_up_tcp_client.hpp" />
     <ClInclude Include="model_automation.hpp" />
+    <ClCompile Include="model_am_up_tcp_client.cpp" />
     <ClCompile Include="model_automation.cpp" />
+    <ClCompile Include="model_conf.cpp" />
+    <ClCompile Include="model_conf_tcp_client.cpp" />
     <ClCompile Include="SafeQueue.cpp" />
     <ClCompile Include="sensor.cpp" />
     <ClCompile Include="shell\src\PlatformExtensions.cpp" />
@@ -155,6 +159,8 @@
     <ClInclude Include="INIReader.h" />
     <ClInclude Include="log.hpp" />
     <ClInclude Include="model_am_tcp_client.hpp" />
+    <ClInclude Include="model_conf.hpp" />
+    <ClInclude Include="model_conf_tcp_client.hpp" />
     <ClInclude Include="out_cache.hpp" />
     <ClInclude Include="SafeQueue.hpp" />
     <ClInclude Include="sensor.hpp" />

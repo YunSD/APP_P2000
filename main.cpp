@@ -42,6 +42,7 @@
 #include "model_automation.hpp"
 #include "INIReader.h"
 #include "conf.hpp"
+#include "model_conf.hpp"
 
 static const Rml::String sandbox_default_rcss = R"(
 body { top: 0; left: 0; right: 0; bottom: 0; overflow: hidden auto; }
@@ -116,7 +117,7 @@ const static std::string block_green = "div-li-green-block";
 class DemoWindow : public Rml::EventListener
 {
 public:
-	DemoWindow(const Rml::String& title, Rml::Context* context):mode_a(sensor_list)
+	DemoWindow(const Rml::String& title, Rml::Context* context):mode_a(sensor_list),mode_f(sensor_list)
 	{
 		using namespace Rml;
 		document = context->LoadDocument("demo.rml");
@@ -234,33 +235,35 @@ public:
 		{
 			// 应该是用于 css 以及 效果更新
 			iframe->UpdateDocument();
-			// 刷新传感器状态
-			static std::stringstream ss;
-			for (std::vector<sensor*>::iterator it = sensor_list.begin(); it != sensor_list.end(); ++it) {
 
-				ss.str("");
-				ss << "sensor-div" << (*it)->index;
-				if (auto target = document->GetElementById(ss.str())) {
-					if ((*it)->getConnectFlag()) {
-						target->SetClassNames(p_green);
+			if (is_auto) {
+				// 刷新传感器状态
+				static std::stringstream ss;
+				for (std::vector<sensor*>::iterator it = sensor_list.begin(); it != sensor_list.end(); ++it) {
+
+					ss.str("");
+					ss << "sensor-div" << (*it)->index;
+					if (auto target = document->GetElementById(ss.str())) {
+						if ((*it)->getConnectFlag()) {
+							target->SetClassNames(p_green);
+						}
+						else {
+							target->SetClassNames(p_red);
+						}
 					}
-					else {
-						target->SetClassNames(p_red);
+
+					ss.str("");
+					ss << "sensor-block" << (*it)->index;
+					if (auto target = document->GetElementById(ss.str())) {
+						if ((*it)->getConnectFlag()) {
+							target->SetClassNames(block_green);
+						}
+						else {
+							target->SetClassNames(block_red);
+						}
 					}
 				}
-
-				ss.str("");
-				ss << "sensor-block" << (*it)->index;
-				if (auto target = document->GetElementById(ss.str())) {
-					if ((*it)->getConnectFlag()) {
-						target->SetClassNames(block_green);
-					}
-					else {
-						target->SetClassNames(block_red);
-					}
-				}
-			}
-
+			}			
 		}
 		if (submitting && gauge && progress_horizontal)
 		{
@@ -382,6 +385,16 @@ public:
 		}
 	}
 
+	bool conf_model_connect(int index) {
+		return mode_f.start(index);
+	}
+	void conf_model_scanner() {
+		mode_f.scanner_label();
+	}
+	void conf_model_close() {
+		mode_f.stop();
+	}
+
 private:
 	Rml::ElementDocument* document = nullptr;
 	Rml::ElementDocument* iframe = nullptr;
@@ -396,7 +409,8 @@ private:
 	bool is_auto = true;
 	// 自动模式下缓冲对象
 	model_automation mode_a;
-
+	// 配置模式下的缓冲对象
+	model_conf mode_f;
 };
 
 
@@ -422,6 +436,29 @@ public:
 		}
 		else if (value == "config_model") {
 			demo_window->updateWorkModel(false);
+		}
+		else if (value == "cm_connect") {
+			auto source = static_cast<Rml::ElementFormControlSelect*>(element->GetElementById("select_sensor_list"));
+			int index = source->GetSelection();
+			bool flag = demo_window->conf_model_connect(index);
+			if (flag) {
+				MessageBox(nullptr, TEXT("连接成功"), TEXT("Message"), MB_OK);
+			}
+			else {
+				MessageBox(nullptr, TEXT("连接失败"), TEXT("Message"), MB_OK);
+			}
+		}
+		else if (value == "cm_search") {
+			try {
+				demo_window->conf_model_scanner();
+			}
+			catch (...) {
+				MessageBox(nullptr, TEXT("读取过程出现错误"), TEXT("Message"), MB_OK);
+			}
+			
+		}
+		else if (value == "cm_close") {
+			demo_window->conf_model_close();
 		}
 		else if (value == "rating")
 		{
