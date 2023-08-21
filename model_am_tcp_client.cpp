@@ -131,11 +131,8 @@ void model_am_tcp_client::handle_connect(const std::error_code& error,
 
 void model_am_tcp_client::start_read()
 {
-    // Set a deadline for the read operation.
-    //deadline_.expires_after(std::chrono::seconds(30));
-
     // Start an asynchronous operation to read a newline-delimited message.
-    asio::async_read(socket_, asio::buffer(package_head), 
+    asio::async_read(socket_, asio::buffer(package_head, 2), 
         std::bind(&model_am_tcp_client::handle_read, this, _1, _2));
     //asio::async_read_until(socket_,
     //    asio::dynamic_buffer(input_buffer_), '\n',
@@ -157,28 +154,29 @@ void model_am_tcp_client::handle_read(const std::error_code& error, std::size_t 
         // 全部读取
         try {
             asio::read(socket_, asio::buffer(data, len));
-            sensor_->put_temporary(data, len);
+
+            if (len == 0x0a || len == 0x04) {
+                if (temporary_data.size() > 0)
+                {
+                    // save
+                    sensor_->put_temporary(temporary_data);
+                    temporary_data.clear();
+                }
+            }
+            else {
+                //指针往后推3位
+                string data_ = HEX::u_hex_to_string(data + 3, len - 3 - 2, ' ');
+                temporary_data.push_back(data_);
+            }
+            delete[] data;
         }
         catch (...) {
             stop();
         }
-        
-        
-        // reset
-        //package_head.erase(0, n);
-
-        // Empty messages are heartbeats and so ignored.
-        /*if (!line.empty())
-        {
-            std::cout << "Received: " << line << "\n";
-        }*/
-
         start_read();
     }
     else
     {
-        std::cout << "Error on receive: " << error.message() << "\n";
-
         stop();
     }
 }
@@ -189,7 +187,8 @@ void model_am_tcp_client::start_write()
         return;
 
     // Start an asynchronous operation to send a heartbeat message.
-    asio::async_write(socket_, asio::buffer("\n", 1),
+    static u_char* command_search_label = new u_char[6]{ 0xA0, 0x04, 0x01, 0x89, 0x01, 0xD1 };
+    asio::async_write(socket_, asio::buffer(command_search_label, 6),
         std::bind(&model_am_tcp_client::handle_write, this, _1));
 }
 
@@ -212,8 +211,6 @@ void model_am_tcp_client::handle_write(const std::error_code& error)
     }
     else
     {
-        std::cout << "Error on heartbeat: " << error.message() << "\n";
-
         stop();
     }
 }

@@ -13,6 +13,8 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include "hex_util.h"
+#include "log.hpp"
 
 using asio::steady_timer;
 using asio::ip::tcp;
@@ -27,18 +29,21 @@ public:
 
     bool connect(string host);
 
-    void read_search();
+    vector<string> read_search();
 
-    void write_label();
+    void write_label(u_char* data1, int len1, u_char* data2, int len2);
+
+    // 1:安静 2：盘存后蜂鸣 3：读到标签时蜂鸣(每次)
+    bool write_voice_model(int flag);
 
     void disconnect();
 
     volatile bool connect_flag = false;
 
 private:
-    void write(u_char* data);
+    void write(u_char* data, int len);
 
-    shared_ptr<u_char[]> read();
+    vector<string> read(bool circuit);
 
     asio::io_context io_context_;
     tcp::socket socket_;

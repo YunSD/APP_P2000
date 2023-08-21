@@ -12,6 +12,8 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include "log.hpp"
+#include "hex_util.h"
 
 using asio::steady_timer;
 using asio::ip::tcp;
@@ -22,7 +24,8 @@ using namespace std;
 class model_am_up_tcp_client
 {
 public:
-    model_am_up_tcp_client(asio::io_context* io_context, const vector<sensor*> sensor_list);
+    model_am_up_tcp_client(asio::io_context* io_context,const string host,
+        const string port, const vector<sensor*> sensor_list);
     ~model_am_up_tcp_client();
 
     void start();
@@ -46,16 +49,27 @@ private:
     void handle_write(const std::error_code& error);
 
 private:
-    const std::vector<sensor*> sensor_list;
+    
+    volatile bool stopped_ = false;
 
-    bool stopped_ = false;
-    tcp::resolver::results_type endpoints_;
-    tcp::socket socket_;
+    void gen_message();
 
-    std::thread* worker;
-    asio::io_context* io_context;
-
+    string gen_message_content();
+    
     void worker_process();
 
+    // 对象池
+    const std::vector<sensor*> sensor_list_;
+
+    char* data_;
+    int data_len;
+
+    // socket
+    asio::io_context* io_context;
+    tcp::resolver::results_type endpoints_;
+    tcp::socket socket_;
     steady_timer heartbeat_timer_;
+
+    // 线程工人
+    std::thread* worker;
 };

@@ -12,6 +12,8 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include "hex_util.h"
+#include "log.hpp"
 
 using asio::steady_timer;
 using asio::ip::tcp;
@@ -110,12 +112,13 @@ private:
     void handle_write(const std::error_code& error);
 
 private:
-    bool stopped_ = false;
+    volatile bool stopped_ = false;
     tcp::resolver::results_type endpoints_;
     tcp::socket socket_;
     // package_head
     u_char package_head[2];
     sensor *sensor_;
+    vector<string> temporary_data;
 
     std::thread* worker;
     asio::io_context* io_context;

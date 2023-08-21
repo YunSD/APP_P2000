@@ -90,6 +90,9 @@
     <ClCompile Include="model_conf.cpp">
       <Filter>container</Filter>
     </ClCompile>
+    <ClCompile Include="hex_util.cpp">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shell\include\PlatformExtensions.h">
@@ -151,6 +154,12 @@
     </ClInclude>
     <ClInclude Include="model_conf.hpp">
       <Filter>container</Filter>
+    </ClInclude>
+    <ClInclude Include="label.hpp">
+      <Filter>container</Filter>
+    </ClInclude>
+    <ClInclude Include="hex_util.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

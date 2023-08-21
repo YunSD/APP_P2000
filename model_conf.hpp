@@ -5,6 +5,7 @@
 #include <thread>
 #include "asio/io_context.hpp"
 #include "model_conf_tcp_client.hpp"
+#include "StrUtil.h"
 
 
 
@@ -14,7 +15,11 @@ public:
 
     void stop();
 
-    void scanner_label();
+    vector<string> scanner_label();
+
+    bool set_voice_model(int flag);
+
+    bool write_label(string ori_label, string new_label);
 
     bool start(int index);
 

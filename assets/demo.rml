@@ -628,7 +628,7 @@ progress {
 	<p>从左侧下拉菜单选中对应传感器，连接成功后方可进行检索操作。</p>
 	<div style="height:70dp;width:auto;">
 		<div style="height:70dp;width:auto;float:left;">
-			<select id="select_sensor_list" name="subject" style="width:300dp; margin-top:15dp;">
+			<select id="select_sensor_list" name="subject" style="width:400dp; margin-top:15dp;">
 			</select>
 		</div>
 		<div style="height:70dp;width:auto;float:left;">
@@ -643,11 +643,11 @@ progress {
 	<p>从左侧下拉菜单选中对应标签，在右侧输入框中输入需要写入的新编码，然后点击写入即可。</p>
 	<div class="center">
 		<div style="height:70dp;width:auto;float:left;">
-			<select id="select_sensor_code_list" style="width:300dp; margin-top:15dp;">
+			<select id="select_sensor_code_list" style="width:400dp; margin-top:15dp;">
 			</select>
 		</div>
 		<div style="height:70dp;width:auto;float:left;">
-			<input type="text" name="new_code" style="width:300dp; margin-top:15dp;"/>
+			<input type="text" id="new_code" style="width:300dp; margin-top:15dp;"/>
 		</div>
 		<div style="height:70dp;width:auto;float:left;">
 			<div style="margin-top:12dp;">
@@ -659,7 +659,7 @@ progress {
 	<h1>传感器蜂鸣设置</h1>
 	<div class="center">
 		<div style="height:70dp;width:auto;float:left;">
-			<select id="select_sensor_list" name="subject" style="width:300dp; margin-top:15dp;">
+			<select id="select_sensor_list" name="subject" style="width:400dp; margin-top:15dp;">
 				<option value="1" selected>保持安静</option>
 				<option value="2" selected>读到标签时蜂鸣</option>
 				<option value="3" selected>未读到标签时蜂鸣</option>

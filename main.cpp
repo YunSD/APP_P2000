@@ -117,7 +117,8 @@ const static std::string block_green = "div-li-green-block";
 class DemoWindow : public Rml::EventListener
 {
 public:
-	DemoWindow(const Rml::String& title, Rml::Context* context):mode_a(sensor_list),mode_f(sensor_list)
+	DemoWindow(const Rml::String& title, Rml::Context* context):
+		mode_a(sensor_list, conf_->ip_, conf_->port_),mode_f(sensor_list)
 	{
 		using namespace Rml;
 		document = context->LoadDocument("demo.rml");
@@ -388,9 +389,15 @@ public:
 	bool conf_model_connect(int index) {
 		return mode_f.start(index);
 	}
-	void conf_model_scanner() {
-		mode_f.scanner_label();
+
+	vector<string> conf_model_scanner() {
+		return mode_f.scanner_label();
 	}
+
+	void write_label(string oris, string news) {
+		mode_f.write_label(oris, news);
+	}
+
 	void conf_model_close() {
 		mode_f.stop();
 	}
@@ -450,7 +457,21 @@ public:
 		}
 		else if (value == "cm_search") {
 			try {
-				demo_window->conf_model_scanner();
+				vector<string> read_info = demo_window->conf_model_scanner();
+
+				if (auto select_source = static_cast<Rml::ElementFormControlSelect*>(element->GetElementById("select_sensor_code_list"))) {
+					// 清空选项卡
+					select_source->RemoveAll();
+					std::stringstream ss;
+					for (std::vector<string>::iterator it = read_info.begin(); it != read_info.end(); ++it) {
+						// 初始化
+						ss.str("");
+						string pc = (*it).substr(9, 5);
+						string epc = (*it).substr(14, (*it).size() - 14);
+						ss << std::uppercase << u8"(" << pc << u8")" << epc;
+						select_source->Add(ss.str(), epc);
+					}
+				}
 			}
 			catch (...) {
 				MessageBox(nullptr, TEXT("读取过程出现错误"), TEXT("Message"), MB_OK);
@@ -459,6 +480,19 @@ public:
 		}
 		else if (value == "cm_close") {
 			demo_window->conf_model_close();
+		}
+		else if (value == "cm_write_value") {
+			if(auto select_source = static_cast<Rml::ElementFormControlSelect*>(element->GetElementById("select_sensor_code_list"))){
+				int selected = select_source->GetSelection();
+				auto cur_element = select_source->GetOption(selected)->GetAttribute("value");
+				// 原标签数值
+				string value = cur_element->Get<Rml::String>();
+				// 新输入的数值
+				auto text_source = static_cast<Rml::ElementFormControlInput*>(element->GetElementById("new_code"));
+				string c_value = text_source->GetValue();
+				if (value.size() < 1 || c_value.size() < 1) return;
+				demo_window->write_label(value, c_value);
+			}
 		}
 		else if (value == "rating")
 		{

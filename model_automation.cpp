@@ -1,6 +1,7 @@
 #include "model_automation.hpp"
 
-model_automation::model_automation(std::vector<sensor*> ver):sensor_list(ver){
+model_automation::model_automation(std::vector<sensor*> ver, string host, string port)
+	:sensor_list(ver), up_host(host), up_port(port){
 	
 }
 
@@ -11,7 +12,8 @@ void model_automation::stop() {
 		delete* it;
 	}
 	client_list.clear();
-
+	up_client->stop(false);
+	delete up_client;
 	// 等待工作线程退出
 	if (!worker) {
 		worker->join();
@@ -26,6 +28,11 @@ void model_automation::start() {
 		model_am_tcp_client* client = new model_am_tcp_client(ic, *it);
 		client_list.push_back(client);
 	}
+	// 初始化上传客户端
+	{
+		asio::io_context* ic = new asio::io_context();
+		up_client = new model_am_up_tcp_client(ic, up_host, up_port, sensor_list);
+	}
 	// 启动工作线程
 	worker = new std::thread(&model_automation::worker_process, this);
 }
@@ -36,5 +43,6 @@ void model_automation::worker_process(){
 	for (std::vector<model_am_tcp_client*>::iterator it = client_list.begin(); it != client_list.end(); ++it) {
 		(*it)->start();
 	}
-
+	// 连接 mes
+	up_client->start();
 }

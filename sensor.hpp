@@ -16,13 +16,12 @@ public:
 	void setConnectFlag(bool flag);
 	bool getConnectFlag();
 	
-	vector<u_char> take_temporary();
-	void put_temporary(u_char* data, long len);
+	vector<string> take_temporary();
+	void put_temporary(vector<string> data);
 
 private:
 	std::mutex m_mutex;
 	volatile bool connect_flag;
 
-	u_char* temporary_data;
-	long data_len = 0;
+	vector<string> temporary_data;
 };
